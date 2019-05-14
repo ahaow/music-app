@@ -1,0 +1,164 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { add } from './../../redux/user.redux'
+
+import TopBar from './../../components/topbar';
+import axios from 'axios';
+import Swiper from 'swiper/dist/js/swiper';
+import 'swiper/dist/css/swiper.min.css'
+
+import { host } from './../../assets/utils/util';
+import './index.scss';
+import Drawer from './../../components/drawer/drawer';
+
+
+class Index extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            banners: [],
+            recommend: []
+        }
+    }
+    render() {
+        return (
+            <div className='index'>
+            <Drawer></Drawer>
+
+                <TopBar></TopBar>
+                <div className='swiper-box'>
+                    <div className='swiper'>
+                        <div className="swiper-container" style={{width: '100%',height: '150px'}}>
+                            <div className="swiper-wrapper" style={{    position: 'absolute',top: '0',fontSize: '0px'}}>
+                                {this.state.banners.map((item,index)=>(
+                                    <div style={{
+                                        color: '#fff'
+                                    }} key={index} className="swiper-slide" style={{fontSize: '10px'}}>
+                                        <a style={{width: '100%',height: '100%',color: '#fff'}}>
+                                          <img style={{width: '100%',height: '100%'}} src={item.imageUrl} alt=""/>
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className='swiper-pagination'></div>
+                        </div>          
+                    </div>
+                </div>
+                <div className='tab'>
+                    <div className="tab-item">
+                        <div className='icon-back'><i className='iconfont icontuijian'></i></div>
+                        <p className='title'>每日推荐</p>
+                    </div>
+                    <div className="tab-item">
+                        <div className='icon-back'><i className='iconfont icondianyingzhiye-gequbangdianjitai'></i></div>
+                        <p className='title'>歌单</p>
+                    </div>
+                    <div className="tab-item">
+                        <div className='icon-back'><i className='iconfont iconpaihangbang'></i></div>
+                        <p className='title'>排行榜</p>
+                    </div>
+                    <div className="tab-item">
+                        <div className='icon-back'><i className='iconfont iconmayi-diantai'></i></div>
+                        <i className='iconfont'></i>
+                        <p className='title'>电台</p>
+                    </div>
+                    <div className="tab-item">
+                        <div className='icon-back'><i className='iconfont icon02f'></i></div>
+                        <p className='title'>直播</p>
+                    </div>
+                </div>
+
+                <div className='recommend'>
+                    <div className='title'>
+                        <h4 className='left-title'>推荐歌单</h4>
+                        <h4 className='right-title'>歌单广场</h4>
+                    </div>
+                    <ul>
+                        {this.state.recommend.map(item => {
+                            return (
+                                <li key={item.id}>
+                                    <div className='img'>
+                                        <img src={item.picUrl} alt=""/>
+                                    </div>
+                                    <p className='name'>{item.name}</p>        
+                                </li>
+                            )
+                        })}
+                        
+                    </ul>
+                </div>
+                            
+               
+            </div>
+            
+        )
+    }
+    add() {
+        this.props.add();
+    }
+    go() {
+        this.props.history.push('/login')
+    }
+    setSwiper() {
+        this.swiper = new Swiper('.swiper-container', {
+            loop: true,     //循环
+            autoplay:{      //自动播放，注意：直接给autoplay:true的话，在点击之后不能再自动播放了
+                delay: 2500,
+                disableOnInteraction: false,    //户操作swiper之后，是否禁止autoplay。默认为true：停止。
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,    // 允许点击跳转
+            },
+        });
+    }
+    getBanners() {
+        return axios.get(`${host}/banner`);
+    }
+    getRecommend() {
+        return axios.get(`http://localhost:4000/recommend/resource`);
+    }
+    getAllData() {
+        axios.all([this.getBanners(),this.getRecommend()])
+            .then(axios.spread((acct,effect) => {
+                // 两个请求现在都执行完成
+                console.log(acct);
+                console.log(effect);
+                if(acct.status === 200 && acct.data.code === 200) {
+                    this.setState({
+                        banners: acct.data.banners,
+                        recommend: effect.data.recommend
+                    },() => {
+                        this.setSwiper();
+                    })
+                }
+            }));
+    }
+
+    componentDidMount() {
+        this.getAllData()
+
+    }
+    componentWillUnmount() {
+        this.swiper = null;
+    }
+}
+
+
+const mapState = (state) => {
+	return {
+        name: state.user.name,
+        num: state.user.num,
+	}
+}
+
+const mapDispatch = (dispatch) => {
+    return {
+        add() {
+            dispatch(add())
+        }
+    }
+}
+
+
+export default connect(mapState,mapDispatch)(Index);

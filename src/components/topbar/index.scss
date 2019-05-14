@@ -1,0 +1,49 @@
+@import './../../assets/scss/red.theme.scss';
+@import './../../assets/scss/utils.scss';
+
+.topbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    background: $background;
+    color: $color;
+    padding: .4rem;
+    @include clearfloat;
+    a {
+        font-size: 14px;
+        color: $NoActiveColor;
+        text-decoration: none;
+        vertical-align: middle;
+        line-height: .27rem;
+        &.selected {
+            color: $color;
+            font-size: 18px;
+        }
+    }
+    .topbar-left {
+        float: left;
+        i {
+            font-size: 18px;
+        }
+    }
+    .topbar-center {
+        float: left;
+        margin-left: 15%;
+        ul {
+            @include clearfloat;
+            li {
+                float: left;
+                margin: 0 .27rem;
+            }
+        }
+    }
+    .topbar-right {
+        float: right;
+        i {
+            font-size: 18px;
+        }
+    }
+    
+}
