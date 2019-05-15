@@ -14,13 +14,13 @@ class TopBar extends Component {
                 ><i className='iconfont icongengduo'></i></div>      
                 <div className="topbar-center">
                     <ul>
-                        <li><NavLink activeClassName="selected" to='/index'>我的</NavLink></li>
-                        <li><NavLink activeClassName="selected" to='/login'>发现</NavLink></li>
-                        <li><NavLink activeClassName="selected" to='/friend'>朋友</NavLink></li>
-                        <li><NavLink activeClassName="selected" to='/video'>视频</NavLink></li>
+                        <li><NavLink activeClassName="selected" to='/index'>推荐音乐</NavLink></li>
+                        <li><NavLink activeClassName="selected" to='/login'>热歌榜</NavLink></li>
+                        <li><NavLink activeClassName="selected" to='/friend'>搜索</NavLink></li>
+                        {/** <li><NavLink activeClassName="selected" to='/video'>视频</NavLink></li> */}
                     </ul>
                 </div>      
-                <div className="topbar-right"><i className='iconfont iconsousuo'></i></div>      
+                {/** <div className="topbar-right"><i className='iconfont iconsousuo'></i></div>      */} 
             </div>
         )
     }

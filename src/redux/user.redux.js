@@ -65,7 +65,9 @@ const defalutState = {
     name: 'hanzo',
     num: 0,
     redirectTo: '',
+    userType: null, // 貌似是用户等级
     loginType: null, // 登录状态
+    loginCode: null,
     userId: null, // 用户唯一Id
     nickname: "", // 用户昵称
     avatarUrl: "", // 用户头像,
@@ -77,10 +79,12 @@ export const user = (state = defalutState,action) => {
         return {
             ...state,
             ...action.payload,
-            loginType: action.payload.loginType,
+            loginCode:action.payload.code,
+            userType: action.payload.profile.userType,
             userId: action.payload.profile.userId,
             nickname: action.payload.profile.nickname,
             avatarUrl: action.payload.profile.avatarUrl,
+            loginType: action.payload.loginType,
             redirectTo: '/index'
         }
     }
@@ -88,7 +92,8 @@ export const user = (state = defalutState,action) => {
         return {
             ...state,
             ...action.payload,
-            loginType:action.payload.code,
+            loginCode:action.payload.code,
+            userType: action.payload.profile.userType,
             userId: action.payload.profile.userId,
             nickname: action.payload.profile.nickname,
             avatarUrl: action.payload.profile.avatarUrl,

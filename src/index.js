@@ -28,7 +28,7 @@ const App = () => {
                         {router.map((route,i) => (
                             <NestedRoute {...route} key={i} />
                         ))}
-                        <Redirect from="/" to="/index" exact={true} />
+                        <Redirect from="/" to="/login" exact={true} />
                     </Switch>
                 </Fragment>
             </BrowserRouter>
