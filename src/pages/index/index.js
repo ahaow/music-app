@@ -10,8 +10,9 @@ import 'swiper/dist/css/swiper.min.css'
 import { host } from './../../assets/utils/util';
 import './index.scss';
 import Drawer from './../../components/drawer/drawer';
-import { spawn } from 'child_process';
 
+import { changeSongName } from './../../assets/utils/util';
+ 
 
 class Index extends React.Component {
     constructor(props) {
@@ -25,8 +26,7 @@ class Index extends React.Component {
     render() {
         return (
             <div className='index'>
-            <Drawer></Drawer>
-
+                <Drawer></Drawer>
                 <TopBar></TopBar>
                 <div className='swiper-box'>
                     <div className='swiper'>
@@ -103,7 +103,7 @@ class Index extends React.Component {
                                     <div className="left-news">
                                         <p className='song-name'>{item.song.name}</p>
                                         <p className='song-info'>
-                                            {this.changeSongName(item.song.artists)}
+                                            {changeSongName(item.song.artists)}
                                         </p>
                                     
                                     </div>
@@ -113,8 +113,6 @@ class Index extends React.Component {
                                 </li>
                             )
                         })}
-
-                        
                     </ul>
                 </div>
             </div>
@@ -126,23 +124,6 @@ class Index extends React.Component {
     }
     go() {
         this.props.history.push('/login')
-    }
-
-    changeSongName(nameArr) {
-        console.log(nameArr);
-        let str = "";
-        let a = ' / ';
-        if(nameArr.length > 0) {
-            for(let i = 0; i < nameArr.length; i++) {
-                str += nameArr[i].name + a;
-                
-            }
-        }
-        str = str.substring(0,str.length-3)
-        return str;        
-        
-        
-
     }
 
     setSwiper() {
@@ -171,9 +152,9 @@ class Index extends React.Component {
         axios.all([this.getBanners(),this.getRecommend(),this.getNew()])
             .then(axios.spread((banner,recommend,newsong) => {
                 // 两个请求现在都执行完成
-                console.log(banner);
-                console.log(recommend);
-                console.log(newsong);
+                // console.log(banner);
+                // console.log(recommend);
+                // console.log(newsong);
                 
                 let newResult = recommend.data.result.slice(0,6);
 

@@ -1,0 +1,69 @@
+@import './../../assets/scss/utils.scss';
+
+.hotsong {
+    .hotsong-logo {
+        width: 100%;
+        height: 4.67rem;
+        background-image: url("http://s3.music.126.net/m/s/img/hot_music_bg_2x.jpg?f01a252389c26bcf016816242eaa6aee");
+        background-repeat: no-repeat;
+        background-size: cover;
+        overflow: hidden;
+        .hoticon {
+            width: 60%;
+            height: 2.4rem;
+            margin-top: .53rem;
+            margin-left: .53rem;
+            background-image: url("http://s3.music.126.net/m/s/img/index_icon_2x.png?5207a28c3767992ca4bb6d4887c74880");
+            background-repeat: no-repeat;
+            background-size: 100% 100% ;
+            background-position: -16px -22px;
+        }
+        .hottime {
+            margin-left: .9rem;
+            color: #fff;
+            font-size: 12px;
+        }
+    }
+    .hot-list {
+        ul {
+            padding: .27rem;
+            li {
+                @include clearfloat;
+                padding: .13rem 0;
+                margin: .13rem 0;
+                border-bottom: 1px solid #e0e0e0;
+                .left-icon {
+                    float: left;
+                    font-size: 18px;
+                    line-height: 1rem;
+                    &.current {
+                        color: red;
+                    }
+                }
+                .left-news {
+                    float: left;
+                    margin-left: .4rem;
+                    vertical-align: middle;
+                    .song-name {
+                        font-size: 16px;
+                    }
+                    .song-info {
+                        margin-top: .13rem;
+                        color: #9D9D9D;
+                        span {
+                            margin-right: .13rem;
+                        }
+                    }
+                }
+                .right-news {
+                    float: right;
+                    vertical-align: middle;
+                    i {
+                        font-size: 28px;
+                        color: #e0e0e0;
+                    }
+                }
+            }
+        }
+    }
+}

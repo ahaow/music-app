@@ -16,7 +16,6 @@
         color: $NoActiveColor;
         text-decoration: none;
         vertical-align: middle;
-
         &.selected {
             color: $color;
         }
@@ -30,8 +29,8 @@
     }
     .topbar-center {
         float: left;
-        margin-left: 10%;
-        width: 80%;
+        margin-left: 8%;
+        width: 85%;
         ul {
             width: 100%;
             display: flex;

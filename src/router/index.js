@@ -4,11 +4,19 @@ import Loadable from 'react-loadable';
 
 
 function MyLoadingComponent() {
-    return <div>Loading...</div>;
+    return null;
   }
   
 
 const router = [
+    {
+        path: '/login',
+        exact: true,
+        component:  Loadable({
+            loader: () => import('./../pages/login/login'),
+            loading: MyLoadingComponent,
+        })
+    },
     {
         path: '/index',
         exact: true,
@@ -18,10 +26,18 @@ const router = [
         })
     },
     {
-        path: '/login',
+        path: '/hotsong',
         exact: true,
         component:  Loadable({
-            loader: () => import('./../pages/login/login'),
+            loader: () => import('./../pages/hotsong/hotsong'),
+            loading: MyLoadingComponent,
+        })
+    },
+    {
+        path: '/singer',
+        exact: true,
+        component:  Loadable({
+            loader: () => import('./../pages/singer/singer'),
             loading: MyLoadingComponent,
         })
     },

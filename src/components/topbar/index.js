@@ -14,8 +14,9 @@ class TopBar extends Component {
                 ><i className='iconfont icongengduo'></i></div>      
                 <div className="topbar-center">
                     <ul>
-                        <li><NavLink activeClassName="selected" to='/index'>推荐音乐</NavLink></li>
-                        <li><NavLink activeClassName="selected" to='/login'>热歌榜</NavLink></li>
+                        <li><NavLink activeClassName="selected" to='/index'>推荐榜</NavLink></li>
+                        <li><NavLink activeClassName="selected" to='/hotsong'>热歌榜</NavLink></li>
+                        <li><NavLink activeClassName="selected" to='/singer'>歌手榜</NavLink></li>
                         <li><NavLink activeClassName="selected" to='/friend'>搜索</NavLink></li>
                         {/** <li><NavLink activeClassName="selected" to='/video'>视频</NavLink></li> */}
                     </ul>
