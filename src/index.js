@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter , Switch , Route , Redirect } from 'react-router-dom';
+import { BrowserRouter , Switch , Redirect } from 'react-router-dom';
 import { createStore,applyMiddleware,compose } from 'redux';
 import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'

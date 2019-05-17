@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { host } from './../assets/utils/util';
+import { api } from './../assets/api/index';
+
 
 // actionTypes
 const USER_ADD = 'USER_ADD';
@@ -22,7 +23,7 @@ export const UserLoginAction = (data) => {
 }
 export const UserLogin = ({phone,pwd}) => {
     return (dispatch) => {
-        axios.get(`${host}/login/cellphone?phone=${phone}&password=${pwd}`).then(res => {
+        axios.get(`${api.LoginPhone}/?phone=${phone}&password=${pwd}`).then(res => {
             console.log(res)
             // 登录成功
             if(res.data.code === 200) {
@@ -47,7 +48,7 @@ export const UserLoginStatusAction = (data) => {
 
 export const UserLoginStatus = () => {
     return (dispatch) => {
-        axios.get(`${host}/login/status`).then(res => {
+        axios.get(`${api.LoginStatus}`).then(res => {
             console.log(res);
             // 登录成功
             if(res.data.code === 200) {

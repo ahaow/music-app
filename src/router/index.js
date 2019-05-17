@@ -1,4 +1,3 @@
-import React from 'react';
 import NestedRoute from './NestedRoute';
 import Loadable from 'react-loadable';
 
@@ -38,6 +37,22 @@ const router = [
         exact: true,
         component:  Loadable({
             loader: () => import('./../pages/singer/singer'),
+            loading: MyLoadingComponent,
+        })
+    },
+    {
+        path: '/singerdetail',
+        exact: true,
+        component:  Loadable({
+            loader: () => import('./../pages/singerdetail/singerdetail'),
+            loading: MyLoadingComponent,
+        })
+    },
+    {
+        path: '/search',
+        exact: true,
+        component:  Loadable({
+            loader: () => import('./../pages/search/search'),
             loading: MyLoadingComponent,
         })
     },

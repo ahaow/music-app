@@ -17,7 +17,7 @@ class TopBar extends Component {
                         <li><NavLink activeClassName="selected" to='/index'>推荐榜</NavLink></li>
                         <li><NavLink activeClassName="selected" to='/hotsong'>热歌榜</NavLink></li>
                         <li><NavLink activeClassName="selected" to='/singer'>歌手榜</NavLink></li>
-                        <li><NavLink activeClassName="selected" to='/friend'>搜索</NavLink></li>
+                        <li><NavLink activeClassName="selected" to='/search'>搜索</NavLink></li>
                         {/** <li><NavLink activeClassName="selected" to='/video'>视频</NavLink></li> */}
                     </ul>
                 </div>      

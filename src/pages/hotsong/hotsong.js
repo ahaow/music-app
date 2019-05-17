@@ -4,7 +4,8 @@ import axios from 'axios';
 import TopBar from './../../components/topbar';
 import Drawer from './../../components/drawer/drawer';
 import './hotsong.scss';
-import { host , changeSongName } from './../../assets/utils/util';
+import { changeSongName } from './../../assets/utils/util';
+import { api } from './../../assets/api/index'
 
 
 export default class HotSong extends React.Component {
@@ -75,7 +76,7 @@ export default class HotSong extends React.Component {
     }
 
     getHotSongData() {
-        axios.get(`${host}/top/list?idx=1`).then(res => {
+        axios.get(api.Hotsong).then(res => {
             if(res.status === 200 && res.data.code === 200) {
                 let HotSongData = res.data.playlist.tracks.slice(0,20);
                 console.log(HotSongData);

@@ -1,18 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { add } from './../../redux/user.redux'
-
 import TopBar from './../../components/topbar';
 import axios from 'axios';
 import Swiper from 'swiper/dist/js/swiper';
 import 'swiper/dist/css/swiper.min.css'
-
-import { host } from './../../assets/utils/util';
 import './index.scss';
 import Drawer from './../../components/drawer/drawer';
-
 import { changeSongName } from './../../assets/utils/util';
- 
+import { api } from './../../assets/api/index';
 
 class Index extends React.Component {
     constructor(props) {
@@ -33,9 +29,14 @@ class Index extends React.Component {
                         <div className="swiper-container" style={{width: '100%',height: '150px'}}>
                             <div className="swiper-wrapper" style={{    position: 'absolute',top: '0',fontSize: '0px'}}>
                                 {this.state.banners.map((item,index)=>(
-                                    <div style={{
-                                        color: '#fff'
-                                    }} key={index} className="swiper-slide" style={{fontSize: '10px'}}>
+                                    <div 
+                                        style={{
+                                            color: '#fff',
+                                            fontSize: '10px'
+                                        }} 
+                                        key={index} 
+                                        className="swiper-slide" 
+                                    >
                                         <a style={{width: '100%',height: '100%',color: '#fff'}}>
                                           <img style={{width: '100%',height: '100%'}} src={item.imageUrl} alt=""/>
                                         </a>
@@ -140,13 +141,13 @@ class Index extends React.Component {
         });
     }
     getBanners() {
-        return axios.get(`${host}/banner`);
+        return axios.get(api.Banner);
     }
     getRecommend() {
-        return axios.get(`${host}/personalized`);
+        return axios.get(api.Personalized);
     }
     getNew() {
-        return axios.get(`${host}/personalized/newsong`);
+        return axios.get(api.Newsong);
     }
     getAllData() {
         axios.all([this.getBanners(),this.getRecommend(),this.getNew()])
