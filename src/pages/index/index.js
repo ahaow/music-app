@@ -7,8 +7,10 @@ import Swiper from 'swiper/dist/js/swiper';
 import 'swiper/dist/css/swiper.min.css'
 import './index.scss';
 import Drawer from './../../components/drawer/drawer';
+import Controller from './../../components/controller/controller';
 import { changeSongName } from './../../assets/utils/util';
 import { api } from './../../assets/api/index';
+
 
 class Index extends React.Component {
     constructor(props) {
@@ -116,6 +118,7 @@ class Index extends React.Component {
                         })}
                     </ul>
                 </div>
+                <Controller></Controller>
             </div>
             
         )

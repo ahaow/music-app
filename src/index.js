@@ -13,6 +13,7 @@ import './assets/utils/flexible_css.debug';
 import AuthRouter from './components/authrouter'
 import router , { NestedRoute } from './router/index';
 
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers,composeEnhancers(
     applyMiddleware(thunk),

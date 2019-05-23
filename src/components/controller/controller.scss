@@ -1,0 +1,213 @@
+@import './../../assets/scss/utils.scss';
+@import './../../assets/scss/red.theme.scss';
+
+
+.controller {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1.33rem;
+    background-color: red;
+    z-index: 1000;
+    .controller-box {
+        width: 100%;
+        height: 1.33rem;
+        .avatar {
+            display: inline-block;
+            vertical-align: middle;
+            width: 1.07rem;
+            height: 1.07rem;
+            background-color: green;
+            margin-left: .27rem;
+            margin-top: .13rem;
+            border-radius: 50%;
+            img {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+            }
+        }
+        .name {
+            display: inline-block;
+            vertical-align: middle;
+            margin-top: .27rem;
+            margin-left: .67rem;
+        }
+        .right-controller {
+            float: right;
+            line-height: 1.33rem;
+            i {
+                font-size: .8rem;
+                margin: 0 .2rem;
+                color: #e0e0e0;
+            }
+        }
+    }
+   
+    .show-enter , .show-active {
+        display: none;
+        transform: translate3d(0, 100%, 0);
+    }
+    .show-enter-active , .show-appear-active {
+        display: block;
+        transform: translate3d(0, 0, 0);
+        transition: all 0.3s ease-in;
+    }
+    .show-exit {
+        display: block;
+        transform: translate3d(0, 0, 0);
+    }
+    .show-exit-active {
+        display: none; 
+        transform: translate3d(0, 100%, 0);
+        transition: all 0.3s ease-in;
+    }
+    .show-exit-done {
+        display: none; 
+        transform: translate3d(0, 100%, 0);
+     }
+    .controller-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: .53rem;
+        background-color: #000;
+        z-index: 1000;
+        .mask-top {
+            color: #fff;
+            text-align: center;
+            @include clearfloat;
+            i {
+                float: left;
+                vertical-align: middle;
+                font-size: .67rem;
+            }
+            span {
+                vertical-align: middle;
+                font-size: .4rem;
+                line-height: .79rem;
+                
+            }
+        }
+        .mask-swiper {
+            position: relative;
+            width: 100%;
+            height: 10.67rem;
+            margin-top: .67rem;
+            overflow: hidden;
+            .swiper {
+                position: absolute;
+                width: 100%;
+                height: 10.67rem;
+                overflow: hidden;
+                .text {
+                    text-align: center;
+                    padding: .13rem 0;
+                    line-height: 20px;
+                    transition-duration: 600ms;
+                    li {
+                        margin: .27rem 0;
+                        font-size: 13px;
+                        &.lineHigh {
+                            color: red;
+                        }
+                    }
+                }
+                .swiper-pagination {
+                    bottom: 10px;
+                    left: 0;
+                    width: 100%;
+                }
+                .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+                    background: $background;
+                }
+                
+                .swiper-wrapper {
+                    border-radius: 5px;
+                }
+                .swiper-slide {
+                    border-radius: 5px;
+                    .avatar {
+                        width: 5.33rem;
+                        height: 5.33rem;
+                        margin: 2rem auto;
+                        border-radius: 50%;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                        }
+                    }
+                }
+                img {
+                    border-radius: 5px;
+                }
+            }
+        }
+
+        .progress {
+            width: 100%;
+            height: .4rem;
+            margin-top: .4rem;
+            color: #fff;
+            @include clearfloat;
+            .start-time {
+                float: left;
+                line-height: .4rem;
+            }
+            .progressBar {
+                position: relative;
+                float: left;
+                width: 74%;
+                margin: .16rem 2.5% 0;
+                height: .08rem;
+                background-color: #e0e0e0;
+                .bar {
+                    position: absolute;
+                    height: 100%;
+                    background: red;
+                }
+                .progress-btn {
+                    position: absolute;
+                    left: 0;
+                    top: -0.15rem;
+                    width: .4rem;
+                    height: .4rem;
+                    background-color: #fff;
+                    border-radius: 50%;
+                }
+               
+            }
+            .end-time {
+                float: right;
+                line-height: .4rem;
+            }
+        }
+
+        .control {
+            width: 100%;
+            .control-box {
+                display: flex;
+                flex-direction: row;
+                width: 80%;
+                height: 50px;
+                margin: 20px auto;
+                text-align: center;
+                i {
+                    flex: 1;
+                    line-height: 50px;
+                    font-size: 30px;
+                    color: #fff;
+                    &.current {
+                        font-size: 40px;
+                    }
+                }
+            }
+        }
+
+
+    }
+}
