@@ -126,10 +126,14 @@
                 border-bottom: 1px solid #e0e0e0;
                 .left-news {
                     float: left;
+                    width: 80%;
                     vertical-align: middle;
-
+                   
                     .song-name {
                         font-size: 16px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                     .song-info {
                         margin-top: .13rem;

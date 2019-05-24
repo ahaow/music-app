@@ -46,25 +46,23 @@
     }
    
     .show-enter , .show-active {
-        display: none;
         transform: translate3d(0, 100%, 0);
     }
     .show-enter-active , .show-appear-active {
-        display: block;
         transform: translate3d(0, 0, 0);
         transition: all 0.3s ease-in;
     }
+    .show-enter-done {
+        transform: translate3d(0, 0, 0);
+    }
     .show-exit {
-        display: block;
         transform: translate3d(0, 0, 0);
     }
     .show-exit-active {
-        display: none; 
         transform: translate3d(0, 100%, 0);
         transition: all 0.3s ease-in;
     }
     .show-exit-done {
-        display: none; 
         transform: translate3d(0, 100%, 0);
      }
     .controller-mask {
@@ -75,7 +73,9 @@
         bottom: 0;
         padding: .53rem;
         background-color: #000;
-        z-index: 1000;
+        color: #fff;
+        transform: translate3d(0, 100%, 0);
+        transition: all 0.3s ease-in;
         .mask-top {
             color: #fff;
             text-align: center;
@@ -121,6 +121,10 @@
                     left: 0;
                     width: 100%;
                 }
+                .swiper-pagination-bullet {
+                    background: #e0e0e0;
+                    opacity: .8;
+                }
                 .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
                     background: $background;
                 }
@@ -133,13 +137,31 @@
                     .avatar {
                         width: 5.33rem;
                         height: 5.33rem;
-                        margin: 2rem auto;
+                        margin: 1.8rem auto;
                         border-radius: 50%;
+                        @keyframes avatarMove {
+                            0% {
+                                transform: rotate(0)
+                            }
+                            100% {
+                                transform: rotate(360deg);
+                            }
+                        }
+                        &.play {
+                            animation: avatarMove 20s linear 0s infinite normal;
+                        }
+                        &.pause {
+                            animation-play-state: paused;
+                        }
                         img {
                             width: 100%;
                             height: 100%;
                             border-radius: 50%;
                         }
+                    }
+                    .currentlyric {
+                        font-size: .37rem;
+                        text-align: center;
                     }
                 }
                 img {

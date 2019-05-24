@@ -14,16 +14,21 @@ export default class Controller extends Component {
     constructor(props) {
         super(props);
         this.text = React.createRef();
+        this.audio = React.createRef();
+        this.mask = React.createRef();
+        this.avatar = React.createRef();
         this.state = {
             mask: false,
+            lineNoHTML: "", // 当前音乐
             picUrl: "", // 音乐封面
-            url: "",
-            lyric: "",
-            medisArray: [],
-            m: "",
-            s: "",
-            ss: "00",
-            sm: "00"
+            url: "", // 歌曲播放地址
+            lyric: "", // 各吃
+            medisArray: [], // 歌词数组
+            m: "", // 总时长-分
+            s: "", // 总时长-秒
+            ss: "00", // 时长-分
+            sm: "00", // 时长-秒
+            audioPlayState: false, // 播放状态  默认没有播放
         }
     }
     
@@ -46,24 +51,9 @@ export default class Controller extends Component {
                     </div>
                 </div>
                 
-                <CSSTransition
-                    in={this.state.mask}
-                    timeout={300}
-                    classNames='show'
-                    unmountOnExit={false}
-                    onEntered={(el) => {
-                        // document.body.style.overflow = "hidden";
-                        // document.body.style.height = "100%";
-                        // document.documentElement.style.overflow = "hidden";
-                    }}
-                    onExited={(el) => {
-                        // document.body.style.overflow = "auto";
-                        // document.body.style.height = "auto";
-                        // document.documentElement.style.overflow = "auto";
-                    }}
-                >   
-                    <Fragment>
-                        <div className='controller-mask'>
+
+                <Fragment>
+                    <div className='controller-mask' ref={this.mask}>
                             <div className='mask-top' >
                                 <i className='iconfont iconico_open' onClick={this.handleMaskHide.bind(this)}></i>
                                 <span>认真的雪</span>
@@ -74,9 +64,10 @@ export default class Controller extends Component {
                                         <div className="swiper-wrapper" style={{ position: 'absolute',top: '0',fontSize: '0px'}}>
 
                                             <div style={{color: '#fff',fontSize: '10px', width: '100%'}}  className="swiper-slide" >
-                                                <div className='avatar'>
+                                                <div className='avatar' ref={this.avatar} >
                                                     <img src={this.state.picUrl} alt=""/>
                                                 </div>
+                                                <p className='currentlyric'>{this.state.lineNoHTML}</p>
                                             </div>
 
                                             <div style={{color: '#fff',fontSize: '10px', width: '100%',overflow: 'hidden'}}  className="swiper-slide" >
@@ -110,38 +101,47 @@ export default class Controller extends Component {
                                 <div className="control-box">
                                     <i className='iconfont iconshangyishou'></i>
                                     <i 
-                                        className='iconfont iconzanting current' 
+                                        className={this.state.audioPlayState ? 'iconfont iconzanting current' : 'iconfont iconbofang current'} 
                                         onClick={this.handlePlayAudio.bind(this)}
                                     ></i>
                                     <i className='iconfont iconxiayishou'></i>
                                 </div>
                             </div>
                             
-                            <audio id='audio' src={this.state.url}></audio>
+                            <audio id='audio' ref={this.audio} src={this.state.url}></audio>
 
                         </div>
                         </Fragment>
-                
-                </CSSTransition>
                
             </div>
         )
     }
 
     handlePlayAudio() {
-        let audio = document.getElementById("audio");
-        audio.play();
+        let audioPlayState = this.state.audioPlayState;
+        let audio = this.audio.current;
+        let avatar = this.avatar.current;
+        if(!audioPlayState) {
+            audio.play();
+            avatar.classList.add('play');
+            avatar.classList.remove('pause');
+            this.setState({
+                audioPlayState: true
+            })
+        } else {
+            audio.pause();
+            avatar.classList.add('pause');
+            this.setState({
+                audioPlayState: false
+            })
+        }
     }
 
     handleMaskShow() {
-        this.setState({
-            mask: true
-        })
+        this.mask.current.style = "transform: translate3d(0, 0, 0)";
     }
     handleMaskHide() {
-        this.setState({
-            mask: false
-        })
+        this.mask.current.style = "transform: translate3d(0, 100%, 0)";
     }
 
     lineHigh() {
@@ -152,6 +152,9 @@ export default class Controller extends Component {
             lis[lineNo-1].removeAttribute("class");
         }
         lis[lineNo].className = "lineHigh"; //高亮显示当前行
+        this.setState({
+            lineNoHTML: lis[lineNo].innerHTML
+        })
 
         //文字滚动
         if(lineNo > C_pos) {
@@ -160,6 +163,8 @@ export default class Controller extends Component {
     }
     //滚回到开头，用于播放结束时
     goback() {
+        let avatar = this.avatar.current;
+        avatar.classList.add('pause');
         let progressBar = document.getElementById("progressBar");
         let bar = progressBar.children[0]
         let progressBtn = progressBar.children[1];
@@ -202,15 +207,6 @@ export default class Controller extends Component {
     }
 
     componentDidMount() {
-        this.maskSwiper = new Swiper('.mask-swiper-container', {
-            loop: true,     //循环
-            autoplay: false,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,    // 允许点击跳转
-            },
-        });
-
 
         Axios.get('http://localhost:4000/song/url?id=32507038').then(res => {
             let url = res.data.data[0].url;
@@ -238,75 +234,9 @@ export default class Controller extends Component {
                 this.setState({
                     medisArray
                 },() => {
-
-                    let audio = document.getElementById("audio");
-                    audio.load();
-                    audio.oncanplay = () => {
-                        // 获取时长
-                        let duration = audio.duration; 
-                        let durationObj = this.FormatSongLength(duration)
-                        this.setState({
-                            m: durationObj.m,
-                            s: durationObj.s
-                        })
-                    }
-                    
-                    // 监听播放器的timeupdate事件，实现文字与音频播放同步
-                    audio.ontimeupdate = () => {
-
-                        if(lineNo == medisArray.length) {
-                            return;
-                        }
-                        var curTime = audio.currentTime; //播放器时间
-
-                        if(parseFloat(medisArray[lineNo].t)<=curTime){
-                            this.lineHigh();//高亮当前行
-                            lineNo++
-                        }
-                        // 动态显示时间
-                        let sm = audio.currentTime / 60;
-                        let ss =  audio.currentTime % 60;
-                        ss = parseInt(ss);
-                        sm = parseInt(sm);
-                        ss < 10 ? ss = "0" + ss : ss = ss;
-                        // sm > 0 ? sm = "0" + sm : sm = sm;
-                        if(sm > 0 && sm < 10) {
-                            sm = "0" + sm;
-                        } else if (sm > 10) {
-                            sm = sm;
-                        }
-                        setTimeout(() => {
-                            this.setState({
-                                ss: ss,
-                                sm: sm
-                            })
-                        }, 0);
-                        
-                        // 自定义播放进度
-                        let progressBar = document.getElementById("progressBar");
-                        let bar = progressBar.children[0]
-                        let progressBtn = progressBar.children[1];
-                        let time = audio.currentTime / audio.duration;
-                        bar.style.width = (time * 100) + "%";
-                        progressBtn.style.left = (time * 100) + "%";
-                    }
-
-                    //监听播放器的ended事件，播放结束时回滚歌词
-                    audio.onended = () => {
-                        console.log("结束了啊")
-                        this.setState({
-                            ss: "00",
-                            sm: "00"
-                        })
-                        this.goback(); //回滚歌词
-                    };
+                    this.SwiperFunc();
+                    this.AudioOperation();
                 })
-                
-                
-
-
-
-                
 
             })
         }).catch(err => {
@@ -314,6 +244,92 @@ export default class Controller extends Component {
         })
     }
 
-    componentDidUpdate() {
+    AudioOperation() {
+        let audio = this.audio.current;
+        if(!audio) {
+            return;
+        } else {
+            let medisArray = this.state.medisArray;
+            audio.load();
+            audio.oncanplay = () => {
+                // 获取时长
+                let duration = audio.duration; 
+                let durationObj = this.FormatSongLength(duration)
+                this.setState({
+                    m: durationObj.m,
+                    s: durationObj.s
+                })
+            }
+            audio.ontimeupdate = () => {
+
+                if(lineNo == medisArray.length) {
+                    return;
+                }
+                var curTime = audio.currentTime; //播放器时间
+
+                if(parseFloat(medisArray[lineNo].t)<=curTime){
+                    this.lineHigh();//高亮当前行
+                    lineNo++
+                }
+                
+
+                // 动态显示时间
+                let sm = audio.currentTime / 60;
+                let ss =  audio.currentTime % 60;
+                ss = parseInt(ss);
+                sm = parseInt(sm);
+                ss < 10 ? ss = "0" + ss : ss = ss;
+                // sm > 0 ? sm = "0" + sm : sm = sm;
+                if(sm > 0 && sm < 10) {
+                    sm = "0" + sm;
+                } else if (sm > 10) {
+                    sm = sm;
+                }
+                setTimeout(() => {
+                    this.setState({
+                        ss: ss,
+                        sm: sm
+                    })
+                }, 0);
+                
+
+                // 自定义播放进度
+                let progressBar = document.getElementById("progressBar");
+                let bar = progressBar.children[0]
+                let progressBtn = progressBar.children[1];
+                let time = audio.currentTime / audio.duration;
+                bar.style.width = (time * 100) + "%";
+                progressBtn.style.left = (time * 100) + "%";
+                
+                //监听播放器的ended事件，播放结束时回滚歌词
+                audio.onended = () => {
+                    setTimeout(() => {
+                        this.setState({
+                            ss: "00",
+                            sm: "00",
+                            audioPlayState: false,
+                            lineNoHTML: ""
+                        })
+                    }, 0);
+                    this.goback(); //回滚歌词
+                };
+            }
+        }            
+    }
+
+    SwiperFunc() {
+        this.maskSwiper = new Swiper('.mask-swiper-container', {
+            loop: false,     //循环
+            autoplay: false,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,    // 允许点击跳转
+            },
+        });
+    }
+
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        
     }
 }
