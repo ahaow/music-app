@@ -3,5 +3,6 @@
 import { combineReducers } from 'redux';
 import { user } from './redux/user.redux';
 import { drawer } from './redux/drawer.redux';
+import { music } from './redux/music.redux';
 
-export default combineReducers({user,drawer})
+export default combineReducers({user,drawer,music})

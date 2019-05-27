@@ -28,3 +28,18 @@ export const GetRequ = (url) => {
     }
     return theRequest;        
 }
+
+
+// 格式化歌词
+export const FormatLyric = (lyric) => {
+    var medisArray = [];
+    var medises = lyric.split("\n");
+    medises.forEach((item,index) => {
+        var t = item.substring(item.indexOf("[") + 1, item.indexOf("]"));
+        medisArray.push({
+            t: (t.split(":")[0] * 60 + parseFloat(t.split(":")[1])).toFixed(3),
+            c: item.substring(item.indexOf("]") + 1, item.length)
+        });
+    });
+    return medisArray;
+}

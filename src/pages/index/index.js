@@ -7,9 +7,9 @@ import Swiper from 'swiper/dist/js/swiper';
 import 'swiper/dist/css/swiper.min.css'
 import './index.scss';
 import Drawer from './../../components/drawer/drawer';
-import Controller from './../../components/controller/controller';
 import { changeSongName } from './../../assets/utils/util';
 import { api } from './../../assets/api/index';
+import { getMusicAll , music_play , music_reset } from './../../redux/music.redux';
 
 
 class Index extends React.Component {
@@ -111,16 +111,18 @@ class Index extends React.Component {
                                     
                                     </div>
                                     <div className="right-news">
-                                        <i className='iconfont iconbofang'></i>
+                                        <i 
+                                            className='iconfont iconbofang'
+                                            onClick={this.handleMusicPlay.bind(this,item.id)}
+                                        >
+                                        </i>
                                     </div>
                                 </li>
                             )
                         })}
                     </ul>
                 </div>
-                <Controller></Controller>
             </div>
-            
         )
     }
     add() {
@@ -128,6 +130,17 @@ class Index extends React.Component {
     }
     go() {
         this.props.history.push('/login')
+    }
+
+    handleMusicPlay(id) {
+        console.log(id)
+        this.props.music_reset();
+        setTimeout(() => {
+            this.props.getMusicAll(id);
+            this.props.music_play();
+        }, 0);
+
+
     }
 
     setSwiper() {
@@ -155,13 +168,7 @@ class Index extends React.Component {
     getAllData() {
         axios.all([this.getBanners(),this.getRecommend(),this.getNew()])
             .then(axios.spread((banner,recommend,newsong) => {
-                // 两个请求现在都执行完成
-                // console.log(banner);
-                // console.log(recommend);
-                // console.log(newsong);
-                
                 let newResult = recommend.data.result.slice(0,6);
-
                 if(banner.status === 200 && banner.data.code === 200 && newsong.data.code === 200) {
                     this.setState({
                         banners: banner.data.banners,
@@ -188,6 +195,7 @@ const mapState = (state) => {
 	return {
         name: state.user.name,
         num: state.user.num,
+        mask: state.music.mask
 	}
 }
 
@@ -195,6 +203,15 @@ const mapDispatch = (dispatch) => {
     return {
         add() {
             dispatch(add())
+        },
+        getMusicAll(id) {
+            dispatch(getMusicAll(id))
+        },
+        music_play() {
+            dispatch(music_play())
+        },
+        music_reset() {
+            dispatch(music_reset())
         }
     }
 }

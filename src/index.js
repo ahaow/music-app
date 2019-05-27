@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter , Switch , Redirect } from 'react-router-dom';
+import { BrowserRouter , Switch , Redirect , withRouter } from 'react-router-dom';
 import { createStore,applyMiddleware,compose } from 'redux';
 import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
@@ -9,9 +9,9 @@ import * as serviceWorker from './serviceWorker';
 import './assets/scss/reset.scss';
 import './assets/utils/flexible.debug';
 import './assets/utils/flexible_css.debug';
-
 import AuthRouter from './components/authrouter'
 import router , { NestedRoute } from './router/index';
+import Controller from './components/controller/controller'
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -31,12 +31,12 @@ const App = () => {
                         ))}
                         <Redirect from="/" to="/login" exact={true} />
                     </Switch>
+                    <Controller></Controller>
                 </Fragment>
             </BrowserRouter>
         </Provider>
     )
 }
-
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
