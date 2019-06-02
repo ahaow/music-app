@@ -39,18 +39,22 @@
 
     }
     .search-list {
+        margin-bottom: 1.33rem;
         background-color: #FAFAFA;
         ul {
             li {
                 @include clearfloat;
                 padding: .27rem;
                 .left-info {
+                    width: 85%;
                     float: left;
                     .song-name {
                         font-size: 14px;
                         letter-spacing: 1px;
+                        @include text-ellipsis;
                     }
                     .song-info {
+                        @include text-ellipsis;
                         margin-top: .13rem;
                         color: #BABABA;
                     }

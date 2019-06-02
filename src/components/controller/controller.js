@@ -9,11 +9,14 @@ import {
     ChangeDurationObj,
     ChangeCurrentTime,
     ChangeLineNoHTML, 
-    AudioOnended } from './../../redux/music.redux';
+    AudioOnended,
+    music_pasue,
+    music_play
+} from './../../redux/music.redux';
   
 var lineNo = 0; //当前行
-var C_pos = 6; //C位
-var offset = -20; //滚动距离（应等于行高）
+var C_pos = 5; //C位
+var offset = -40; //滚动距离（应等于行高）
 
 class Controller extends Component {
     constructor(props) {
@@ -49,7 +52,7 @@ class Controller extends Component {
                         </span>
                         <div className='right-controller'>
                             <i className={this.props.audioPlayState ? 'iconfont iconzanting current' : 'iconfont iconbofang current'} 
-                                onClick={this.handlePlayAudio.bind(this)}
+                                onClick={this.togglePlayAudio.bind(this)}
                             >
                             </i>
                             <i className='iconfont iconliebiao'></i>
@@ -60,7 +63,7 @@ class Controller extends Component {
                         <div className='controller-mask' ref={this.mask}>
                         <div className='mask-top' >
                                     <i className='iconfont iconico_open' onClick={this.handleMaskHide.bind(this)}></i>
-                                    <span>{this.props.songName}</span>
+                                    <span>{this.props.songName} - {this.props.singerName}</span>
                                 </div>
                                 <div className="mask-swiper">
                                     <div className='swiper'>
@@ -105,7 +108,7 @@ class Controller extends Component {
                                         <i className='iconfont iconshangyishou'></i>
                                         <i 
                                             className={this.props.audioPlayState ? 'iconfont iconzanting current' : 'iconfont iconbofang current'} 
-                                            onClick={this.handlePlayAudio.bind(this)}
+                                            onClick={this.togglePlayAudio.bind(this)}
                                         ></i>
                                         <i className='iconfont iconxiayishou'></i>
                                     </div>
@@ -117,13 +120,14 @@ class Controller extends Component {
             )
         }
     }
+
+    // 播放音乐
     handlePlayAudio() {
         let audioPlayState = this.props.audioPlayState;
         let audio = this.audio.current;
         let avatar = this.avatar.current;
         setTimeout(() => {
             if(audioPlayState) {
-                audio.load();
                 audio.play();
                 avatar.classList.add('play');
                 avatar.classList.remove('pause');
@@ -132,6 +136,22 @@ class Controller extends Component {
                 avatar.classList.add('pause');
             }
         },500)
+    }
+
+    // 切换播放状态
+    togglePlayAudio() {
+        let audio = this.audio.current;
+        let audioPlayState = this.props.audioPlayState;
+        console.log(audioPlayState);
+        // 如果播放状态为true, 就设置为false
+        if(audioPlayState) {
+            this.props.music_pasue()
+            audio.pause();
+        } else {
+            this.props.music_play()
+            audio.play();
+        }
+
     }
 
     handleMaskShow() {
@@ -148,16 +168,23 @@ class Controller extends Component {
             if(lineNo > 0) { 
                 lis[lineNo-1].removeAttribute("class");
             }
-            console.log()
             lis[lineNo].className = "lineHigh"; //高亮显示当前行
             this.props.ChangeLineNoHTML(lis[lineNo].innerHTML)
-
             //文字滚动
             if(lineNo > C_pos) {
                 ul.style.transform = "translateY("+(lineNo-C_pos)*offset+"px)"; //整体向上滚动一行高度
             }
         }
     }
+    // 切换歌曲时,歌词状态重置
+    resetLyric() {
+        let lis = this.text.current.children;
+        for(let i = 0; i<lis.length;i++) {
+            lis[i].className = "";
+        }
+        lineNo = 0;
+    }
+
     //滚回到开头，用于播放结束时
     goback() {
         let avatar = this.avatar.current;
@@ -198,7 +225,8 @@ class Controller extends Component {
         if(!audio) {
             return;
         } else {
-            audio.load();
+            this.resetLyric();
+            // audio.load();
             audio.oncanplay = () => {
                 // 获取时长
                 let duration = audio.duration; 
@@ -217,6 +245,7 @@ class Controller extends Component {
                     this.lineHigh();//高亮当前行
                     lineNo++
                 }
+
 
                 // 动态显示时间
                 let sm = audio.currentTime / 60;
@@ -265,7 +294,6 @@ class Controller extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(this.props.audioPlayState !== prevProps.audioPlayState) {
-            console.log(777);
             this.SwiperFunc();
             this.AudioOperation();
             this.handlePlayAudio();
@@ -306,6 +334,12 @@ const mapDispatch = (dispatch) => {
         },
         AudioOnended() {
             dispatch(AudioOnended())
+        },
+        music_play() {
+            dispatch(music_play())
+        },
+        music_pasue() {
+            dispatch(music_pasue())
         }
     }
 }

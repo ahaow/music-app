@@ -133,14 +133,11 @@ class Index extends React.Component {
     }
 
     handleMusicPlay(id) {
-        console.log(id)
         this.props.music_reset();
         setTimeout(() => {
             this.props.getMusicAll(id);
             this.props.music_play();
-        }, 0);
-
-
+        }, 300);
     }
 
     setSwiper() {

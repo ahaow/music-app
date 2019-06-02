@@ -28,10 +28,14 @@
             }
         }
         .name , .playtime {
+            width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             display: inline-block;
             vertical-align: middle;
             margin-top: .27rem;
-            margin-left: .67rem;
+            margin-left: .37rem;
         }
         
         .right-controller {
@@ -110,7 +114,7 @@
                     line-height: 20px;
                     transition-duration: 600ms;
                     li {
-                        margin: .27rem 0;
+                        margin: .53rem 0;
                         font-size: 13px;
                         &.lineHigh {
                             color: red;

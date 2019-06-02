@@ -6,8 +6,6 @@ import './singer.scss';
 import { api } from './../../assets/api/index'
 import LazyLoad from 'react-lazyload';
 import { Link } from 'react-router-dom';
-
-
 export default class Singer extends React.Component {
     constructor(props) {
         super(props);

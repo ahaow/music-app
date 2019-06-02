@@ -52,12 +52,14 @@
         }
     }
     .song-list {
+        margin-bottom: 1.33rem;
         background-color: #FAFAFA;
         ul {
             li {
                 @include clearfloat;
                 padding: .27rem;
                 .left-info {
+                    width: 85%;
                     float: left;
                     .song-name {
                         font-size: 14px;
@@ -65,6 +67,9 @@
                     }
                     .song-info {
                         margin-top: .13rem;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                         color: #BABABA;
                     }
                 }

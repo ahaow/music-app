@@ -1,14 +1,15 @@
 import React from 'react';
 import axios from 'axios';
-
+import { connect } from 'react-redux';
 import TopBar from './../../components/topbar';
 import Drawer from './../../components/drawer/drawer';
 import './hotsong.scss';
 import { changeSongName } from './../../assets/utils/util';
 import { api } from './../../assets/api/index'
+import { getMusicAll , music_play , music_reset } from './../../redux/music.redux';
 
 
-export default class HotSong extends React.Component {
+class HotSong extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -48,7 +49,9 @@ export default class HotSong extends React.Component {
                                             <span>{item.al.name}</span>
                                         </p>
                                     </div>
-                                    <div className="right-news">
+                                    <div className="right-news"
+                                        onClick={this.handleMusicPlay.bind(this,item.id)}
+                                    >
                                         <i className='iconfont iconbofang'></i>
                                     </div>
                                 </li>
@@ -61,25 +64,19 @@ export default class HotSong extends React.Component {
         )
     }
 
-    changeSongName(nameArr) {
-        console.log(nameArr);
-        let str = "";
-        let a = ' / ';
-        if(nameArr.length > 0) {
-            for(let i = 0; i < nameArr.length; i++) {
-                str += nameArr[i].name + a;
-                
-            }
-        }
-        str = str.substring(0,str.length-3)
-        return str;        
+    handleMusicPlay(id) {
+        this.props.music_reset();
+        setTimeout(() => {
+            this.props.getMusicAll(id);
+            this.props.music_play();
+        }, 300);
     }
+
 
     getHotSongData() {
         axios.get(api.Hotsong).then(res => {
             if(res.status === 200 && res.data.code === 200) {
                 let HotSongData = res.data.playlist.tracks.slice(0,20);
-                console.log(HotSongData);
                 this.setState({
                     HotSongData
                 })
@@ -92,5 +89,20 @@ export default class HotSong extends React.Component {
     componentDidMount() {
         this.getHotSongData();
     }
-    
 }
+
+const mapDispatch = (dispatch) => {
+    return {
+        getMusicAll(id) {
+            dispatch(getMusicAll(id))
+        },
+        music_play() {
+            dispatch(music_play())
+        },
+        music_reset() {
+            dispatch(music_reset())
+        }
+    }
+}
+
+export default connect(null,mapDispatch)(HotSong);

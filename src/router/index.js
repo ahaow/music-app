@@ -5,7 +5,6 @@ import Loadable from 'react-loadable';
 function MyLoadingComponent() {
     return null;
   }
-  
 
 const router = [
     {

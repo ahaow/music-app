@@ -1,11 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import TopBar from './../../components/topbar';
 import Drawer from './../../components/drawer/drawer';
 import './search.scss';
 import { api } from './../../assets/api/index';
 import axios from 'axios';
+import { getMusicAll , music_play , music_reset } from './../../redux/music.redux';
 
-export default class Search extends React.Component {
+class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,9 +37,11 @@ export default class Search extends React.Component {
                                     <li key={item.id}>
                                         <div className='left-info'>
                                             <p className='song-name'>{item.name}</p>
-                                            <p className='song-info'>{item.album.name}</p>
+                                            <p className='song-info'>{item.album.name} - {item.artists[0].name}</p>
                                         </div>
-                                        <div className='right'><i className='iconfont iconshipinbo'></i></div>
+                                        <div className='right'
+                                            onClick={this.handleMusicPlay.bind(this,item.id)}
+                                        ><i className='iconfont iconshipinbo'></i></div>
                                     </li>
                                 )
                             })}
@@ -78,7 +82,32 @@ export default class Search extends React.Component {
             console.log(err);
         })
     }
+
+    handleMusicPlay(id) {
+        this.props.music_reset();
+        setTimeout(() => {
+            this.props.getMusicAll(id);
+            this.props.music_play();
+        }, 300);
+    }
+
     componentDidMount() {
         
     }
 }
+
+const mapDispatch = (dispatch) => {
+    return {
+        getMusicAll(id) {
+            dispatch(getMusicAll(id))
+        },
+        music_play() {
+            dispatch(music_play())
+        },
+        music_reset() {
+            dispatch(music_reset())
+        }
+    }
+}
+
+export default connect(null,mapDispatch)(Search)

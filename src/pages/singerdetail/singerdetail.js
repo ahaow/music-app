@@ -1,9 +1,12 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { GetRequ } from './../../assets/utils/util';
 import './singerdetail.scss';
+import { getMusicAll , music_play , music_reset } from './../../redux/music.redux';
 
-export default class SingerDetail extends React.Component {
+
+class SingerDetail extends React.Component {
     constructor(props) {
         super(props);
         this.avatarRef = React.createRef();
@@ -46,7 +49,10 @@ export default class SingerDetail extends React.Component {
                                                 <p className='song-name'>{item.name}</p>
                                                 <p className='song-info'>{item.ar[0].name} - {item.al.name}</p>
                                             </div>
-                                            <div className='right'><i className='iconfont iconshipinbo'></i></div>
+                                            <div className='right'
+                                                 onClick={this.handleMusicPlay.bind(this,item.id)}
+                                            
+                                            ><i className='iconfont iconshipinbo'></i></div>
                                         </li>
                                     )
                                 })
@@ -68,6 +74,15 @@ export default class SingerDetail extends React.Component {
             </div>
         )
     }
+
+    handleMusicPlay(id) {
+        this.props.music_reset();
+        setTimeout(() => {
+            this.props.getMusicAll(id);
+            this.props.music_play();
+        }, 300);
+    }
+
     handleChangeTabOne() {
         this.setState({
             tabStatus: 1
@@ -118,3 +133,19 @@ export default class SingerDetail extends React.Component {
         })
     }
 }
+
+const mapDispatch = (dispatch) => {
+    return {
+        getMusicAll(id) {
+            dispatch(getMusicAll(id))
+        },
+        music_play() {
+            dispatch(music_play())
+        },
+        music_reset() {
+            dispatch(music_reset())
+        }
+    }
+}
+
+export default connect(null,mapDispatch)(SingerDetail)

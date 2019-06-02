@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { api } from './../assets/api/index';
 import { FormatLyric } from './../assets/utils/util';
+import { stat } from 'fs';
 
 // actionTypes
 const MUSIC_PLAY_DATA = "MUSIC_PLAY_DATA";
 const MUSIC_PLAY = "MUSIC_PLAY"; // 播放
-const MUSIC_RESET = "MUSIC_RESET"; // 播放
+const MUSIC_RESET = "MUSIC_RESET"; // 重置
+const MUSIC_PASUE = "MUSIC_PASUE"; // 暂停
 const MUSIC_DURATION= "MUSIC_DURATION"; // 播放总时长
 const MUSIC_CURRENT = "MUSIC_CURRENT"; // 获取播放时间
 const MUSIC_ONENDED = "MUSIC_ONENDED"; // 播放结束状态
@@ -24,6 +26,13 @@ export const music_play = () => {
 export const music_reset = () => {
     return {
         type: MUSIC_RESET,
+    }
+}
+
+// 暂停
+export const music_pasue = () => {
+    return {
+        type: MUSIC_PASUE,
     }
 }
 
@@ -121,57 +130,90 @@ const defalutState = {
 }
 
 export const music = (state = defalutState,action) => {
-    if(action.type === MUSIC_PLAY_DATA) {
-        return {
-            ...state,
-            songName: action.data._songName, 
-            singerName: action.data._singerName, 
-            url: action.data._url,
-            picUrl: action.data._picUrl,
-            lyric: action.data._lyric,
-            medisArray: action.data.medisArray
-        }
+    switch(action.type) {
+        case MUSIC_PLAY_DATA:
+            return {
+                ...state,songName: action.data._songName,singerName: action.data._singerName,
+                url: action.data._url,picUrl: action.data._picUrl,lyric: action.data._lyric,
+                medisArray: action.data.medisArray
+            }
+        case MUSIC_PLAY:
+            return {...state,audioPlayState:true}
+        case MUSIC_RESET: 
+            return {...state,audioPlayState:false}
+        case MUSIC_PASUE: 
+            return {...state,audioPlayState:false}
+        case MUSIC_DURATION:
+            return {...state,m: action.obj.m,s: action.obj.s}
+        case MUSIC_CURRENT:
+            return {...state,sm: action.obj.sm,ss: action.obj.ss}
+        case MUSIC_LINENO_HTML:
+            return {...state,lineNoHTML:action.data}
+        case MUSIC_ONENDED:
+            return {...state,ss: "00",sm: "00",audioPlayState: false,lineNoHTML: ""}
+        default:
+            return state;
     }
-    if(action.type === MUSIC_PLAY) {
-        return {
-            ...state,
-            audioPlayState: true
-        }
-    }
-    if(action.type === MUSIC_RESET) {
-        return {
-            ...state,
-            audioPlayState: false
-        }
-    }
-    if(action.type === MUSIC_DURATION) {
-        return {
-            ...state,
-            m: action.obj.m,
-            s: action.obj.s,
-        }
-    }
-    if(action.type === MUSIC_CURRENT) {
-        return {
-            ...state,
-            sm: action.obj.sm,
-            ss: action.obj.ss,
-        }
-    }
-    if(action.type === MUSIC_LINENO_HTML) {
-        return {
-            ...state,
-            lineNoHTML: action.data
-        }
-    }
-    if(action.type === MUSIC_ONENDED) {
-        return {
-            ...state,
-            ss: "00",
-            sm: "00",
-            audioPlayState: false,
-            lineNoHTML: ""
-        }
-    }
-    return state;
 }
+
+// export const music = (state = defalutState,action) => {
+//     if(action.type === MUSIC_PLAY_DATA) {
+//         return {
+//             ...state,
+//             songName: action.data._songName, 
+//             singerName: action.data._singerName, 
+//             url: action.data._url,
+//             picUrl: action.data._picUrl,
+//             lyric: action.data._lyric,
+//             medisArray: action.data.medisArray
+//         }
+//     }
+//     if(action.type === MUSIC_PLAY) {
+//         return {
+//             ...state,
+//             audioPlayState: true
+//         }
+//     }
+//     if(action.type === MUSIC_RESET) {
+//         return {
+//             ...state,
+//             audioPlayState: false
+//         }
+//     }
+//     if(action.type === MUSIC_PASUE) {
+//         return {
+//             ...state,
+//             audioPlayState: false
+//         }
+//     }
+//     if(action.type === MUSIC_DURATION) {
+//         return {
+//             ...state,
+//             m: action.obj.m,
+//             s: action.obj.s,
+//         }
+//     }
+//     if(action.type === MUSIC_CURRENT) {
+//         return {
+//             ...state,
+//             sm: action.obj.sm,
+//             ss: action.obj.ss,
+//         }
+//     }
+//     if(action.type === MUSIC_LINENO_HTML) {
+//         return {
+//             ...state,
+//             lineNoHTML: action.data
+//         }
+//     }
+//     if(action.type === MUSIC_ONENDED) {
+//         return {
+//             ...state,
+//             ss: "00",
+//             sm: "00",
+//             audioPlayState: false,
+//             lineNoHTML: ""
+//         }
+//     }
+//     return state;
+// }
